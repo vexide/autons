@@ -111,11 +111,13 @@ impl<R, const N: usize> SimpleSelect<R, N> {
         routes: [Route<R>; N],
         theme: SimpleSelectTheme,
     ) -> Self {
-        assert!(N > 0, "SimpleSelect requires at least one route.");
-        assert!(
-            N <= 12,
-            "SimpleSelect currently only supports up to 12 routes."
-        );
+        const {
+            assert!(N > 0, "SimpleSelect requires at least one route.");
+            assert!(
+                N <= 12,
+                "SimpleSelect currently only supports up to 12 routes."
+            );
+        }
 
         let state = Rc::new(RefCell::new(SelectorState {
             routes,

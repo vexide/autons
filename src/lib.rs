@@ -88,7 +88,6 @@
 //! }
 //! ```
 
-
 #![no_std]
 #![feature(never_type)]
 
