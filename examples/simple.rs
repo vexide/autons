@@ -16,7 +16,7 @@ impl Robot {
     async fn route_2(&mut self) {}
 }
 
-impl SelectedCompete for Robot {}
+impl SelectCompete for Robot {}
 
 #[vexide::main]
 async fn main(peripherals: Peripherals) {

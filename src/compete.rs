@@ -1,6 +1,6 @@
 //! Competition lifecycle traits that support route selection.
 //!
-//! This module provides the [`SelectedCompete`] and [`SelectedCompeteExt`] traits,
+//! This module provides the [`SelectCompete`] and [`SelectCompeteExt`] traits,
 //! which are equivalents to vexide's [`Compete`] and [`CompeteExt`] traits with
 //! additional support for autonomous selectors.
 //! 
@@ -16,7 +16,7 @@ use crate::Selector;
 
 /// A set of functions and routes to run when the competition is in a particular mode.
 #[allow(async_fn_in_trait)]
-pub trait SelectedCompete: Sized {
+pub trait SelectCompete: Sized {
     /// Runs when the robot is put into driver control mode.
     ///
     /// When in opcontrol mode, all device access is available including access to
@@ -63,43 +63,43 @@ pub trait SelectedCompete: Sized {
     async fn after_route(&mut self) {}
 }
 
-/// Internal shared state for [`SelectedCompete`]'s competition runtime instance.
+/// Internal shared state for [`SelectCompete`]'s competition runtime instance.
 /// 
 /// This structure stores both the robot and the user's autonomous selector.
 #[doc(hidden)]
-pub struct SelectedCompeteShared<R, S: Selector<R>> {
+pub struct SelectCompeteShared<R, S: Selector<R>> {
     robot: R,
     selector: S,
 }
 
-/// Extension methods for [`SelectedCompete`].
+/// Extension methods for [`SelectCompete`].
 ///
-/// Automatically implemented for any type implementing [`SelectedCompete`].
+/// Automatically implemented for any type implementing [`SelectCompete`].
 #[allow(clippy::type_complexity)]
-pub trait SelectedCompeteExt<S: Selector<Self>>: SelectedCompete {
+pub trait SelectCompeteExt<S: Selector<Self>>: SelectCompete {
     fn compete(
         self,
         selector: S,
     ) -> CompetitionRuntime<
-        SelectedCompeteShared<Self, S>,
+        SelectCompeteShared<Self, S>,
         !,
         impl for<'s> FnMut(
-            &'s mut SelectedCompeteShared<Self, S>,
+            &'s mut SelectCompeteShared<Self, S>,
         ) -> Pin<Box<dyn Future<Output = ControlFlow<!>> + 's>>,
         impl for<'s> FnMut(
-            &'s mut SelectedCompeteShared<Self, S>,
+            &'s mut SelectCompeteShared<Self, S>,
         ) -> Pin<Box<dyn Future<Output = ControlFlow<!>> + 's>>,
         impl for<'s> FnMut(
-            &'s mut SelectedCompeteShared<Self, S>,
+            &'s mut SelectCompeteShared<Self, S>,
         ) -> Pin<Box<dyn Future<Output = ControlFlow<!>> + 's>>,
         impl for<'s> FnMut(
-            &'s mut SelectedCompeteShared<Self, S>,
+            &'s mut SelectCompeteShared<Self, S>,
         ) -> Pin<Box<dyn Future<Output = ControlFlow<!>> + 's>>,
         impl for<'s> FnMut(
-            &'s mut SelectedCompeteShared<Self, S>,
+            &'s mut SelectCompeteShared<Self, S>,
         ) -> Pin<Box<dyn Future<Output = ControlFlow<!>> + 's>>,
     > {
-        CompetitionRuntime::builder(SelectedCompeteShared {
+        CompetitionRuntime::builder(SelectCompeteShared {
             robot: self,
             selector,
         })
@@ -139,4 +139,4 @@ pub trait SelectedCompeteExt<S: Selector<Self>>: SelectedCompete {
     }
 }
 
-impl<R, S: Selector<Self>> SelectedCompeteExt<S> for R where R: SelectedCompete + 'static {}
+impl<R, S: Selector<Self>> SelectCompeteExt<S> for R where R: SelectCompete + 'static {}

@@ -50,13 +50,8 @@ impl<R> Route<R> {
 #[macro_export]
 macro_rules! route {
     ($func:path) => {{
-        let type_name = ::core::any::type_name_of_val(&$func);
-
         ::autons::simple::Route::new(
-            match &type_name[..type_name.len() - 3].rfind(':') {
-                Some(pos) => &type_name[pos + 1..type_name.len() - 3],
-                None => &type_name[..type_name.len() - 3],
-            },
+            stringify!($func),
             |robot| ::alloc::boxed::Box::pin($func(robot))
         )
     }};

@@ -11,7 +11,7 @@
 //! 
 //! # Examples
 //! 
-//! Robot with two autonomous routes using [`SelectedCompete`](crate::compete::SelectedCompete).
+//! Robot with two autonomous routes using [`SelectCompete`](crate::compete::SelectCompete).
 //! 
 //! ```
 //! #![no_std]
@@ -32,7 +32,7 @@
 //!     async fn route_2(&mut self) {}
 //! }
 //! 
-//! impl SelectedCompete for Robot {
+//! impl SelectCompete for Robot {
 //!     async fn driver(&mut self) {
 //!         // ...
 //!     }
@@ -86,10 +86,10 @@ struct SelectorState<R: 'static, const N: usize> {
 /// dashboards, with basic support for color themes through the [`SimpleSelect::new_with_theme`]
 /// function.
 /// 
-/// This struct implements the [`Selector`] trait and should be used with the [`SelectedCompete`]
+/// This struct implements the [`Selector`] trait and should be used with the [`SelectCompete`]
 /// trait if using vexide's competition runtime.
 /// 
-/// [`SelectedCompete`]: crate::compete::SelectedCompete
+/// [`SelectCompete`]: crate::compete::SelectCompete
 pub struct SimpleSelect<R: 'static, const N: usize> {
     state: Rc<RefCell<SelectorState<R, N>>>,
     _task: Task<()>,

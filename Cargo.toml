@@ -5,7 +5,7 @@ repository = "https://github.com/vexide/autons/"
 authors = ["Tropical"]
 license-file = "LICENSE.md"
 keywords = ["vex", "vexide", "vex-robotics", "robotics", "autonomous"]
-version = "0.1.0-test.1"
+version = "0.1.0-test.2"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -17,8 +17,15 @@ slot = 1
 icon = "cool-x"
 compress = true
 
+[package.metadata.docs.rs]
+targets = ["armv7a-none-eabi"]
+
 [dependencies]
-vexide = { version = "0.7.0-beta.3", default-features = false, features = [ "async", "core", "devices" ] }
+vexide = { version = "0.7.0-beta.3", default-features = false, features = [
+    "async",
+    "core",
+    "devices",
+] }
 
 [dev-dependencies]
 vexide = "0.7.0-beta.3"

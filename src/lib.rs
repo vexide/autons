@@ -40,12 +40,12 @@
 //! }
 //! ```
 //! 
-//! With `autons`, you can instead use the [`SelectedCompete`] trait, which is a modified version of
+//! With `autons`, you can instead use the [`SelectCompete`] trait, which is a modified version of
 //! vexide's `Compete` trait that allows for multiple autonomous routes chosen through a struct
 //! implementing the [`Selector`] trait. Here is a basic example using the [`SimpleSelect`] selector
 //! with two routes on our robot:
 //! 
-//! [`SelectedCompete`]: crate::compete::SelectedCompete
+//! [`SelectCompete`]: crate::compete::SelectCompete
 //! 
 //! ```
 //! #![no_std]
@@ -66,7 +66,7 @@
 //!     async fn route_2(&mut self) {}
 //! }
 //! 
-//! impl SelectedCompete for Robot {
+//! impl SelectCompete for Robot {
 //!     async fn driver(&mut self) {
 //!         // ...
 //!     }
@@ -108,5 +108,5 @@ pub trait Selector<R> {
 /// 
 /// This module is meant to be glob imported.
 pub mod prelude {
-    pub use crate::compete::{SelectedCompete, SelectedCompeteExt};
+    pub use crate::compete::{SelectCompete, SelectCompeteExt};
 }
