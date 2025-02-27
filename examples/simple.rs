@@ -26,8 +26,8 @@ async fn main(peripherals: Peripherals) {
         .compete(SimpleSelect::new(
             peripherals.display,
             [
-                route!("Route 1", Robot::route_1),
-                route!("Route 2", Robot::route_2),
+                route!(Robot::route_1),
+                route!(Robot::route_2),
             ],
         ))
         .await;

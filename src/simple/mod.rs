@@ -72,11 +72,10 @@ pub use route::*;
 pub use theme::*;
 
 struct SelectorState<R: 'static, const N: usize> {
-    routes: [SimpleSelectRoute<R>; N],
+    routes: [Route<R>; N],
     selection: usize,
     dirty_selection: Option<usize>,
 }
-
 
 /// Simple touchscreen-based autonomous route selector.
 /// 
@@ -98,7 +97,7 @@ pub struct SimpleSelect<R: 'static, const N: usize> {
 
 impl<R, const N: usize> SimpleSelect<R, N> {
     /// Creates a new selector from a [`Display`] peripheral and array of routes.
-    pub fn new(display: Display, routes: [SimpleSelectRoute<R>; N]) -> Self {
+    pub fn new(display: Display, routes: [Route<R>; N]) -> Self {
         Self::new_with_theme(display, routes, THEME_DARK)
     }
 
@@ -109,7 +108,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
     #[allow(clippy::await_holding_refcell_ref)] // clippy is too dumb to realize we explicitly drop
     pub fn new_with_theme(
         mut display: Display,
-        routes: [SimpleSelectRoute<R>; N],
+        routes: [Route<R>; N],
         theme: SimpleSelectTheme,
     ) -> Self {
         assert!(N > 0, "SimpleSelect requires at least one route.");

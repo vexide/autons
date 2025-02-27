@@ -13,12 +13,12 @@ type RouteFn<Shared> = for<'s> fn(&'s mut Shared) -> Pin<Box<dyn Future<Output =
 /// 
 /// [`SimpleSelect`]: crate::simple::SimpleSelect
 #[derive(Debug, Eq, PartialEq)]
-pub struct SimpleSelectRoute<R> {
-    pub(crate) name: &'static str,
-    pub(crate) callback: RouteFn<R>,
+pub struct Route<R> {
+    pub name: &'static str,
+    pub callback: RouteFn<R>,
 }
 
-impl<R> Clone for SimpleSelectRoute<R> {
+impl<R> Clone for Route<R> {
     fn clone(&self) -> Self {
         Self {
             name: self.name,
@@ -27,8 +27,12 @@ impl<R> Clone for SimpleSelectRoute<R> {
     }
 }
 
-impl<R> SimpleSelectRoute<R> {
+impl<R> Route<R> {
     pub fn new(name: &'static str, callback: RouteFn<R>) -> Self {
+        Self { name, callback }
+    }
+
+    pub fn test(name: &'static str, callback: RouteFn<R>) -> Self {
         Self { name, callback }
     }
 }
@@ -45,11 +49,22 @@ impl<R> SimpleSelectRoute<R> {
 /// ```
 #[macro_export]
 macro_rules! route {
-    ($name:expr, $func:path) => {{
-        use ::alloc::boxed::Box;
-        use ::autons::simple::SimpleSelectRoute;
+    ($func:path) => {{
+        let type_name = ::core::any::type_name_of_val(&$func);
 
-        SimpleSelectRoute::new($name, |robot| Box::pin($func(robot)))
+        ::autons::simple::Route::new(
+            match &type_name[..type_name.len() - 3].rfind(':') {
+                Some(pos) => &type_name[pos + 1..type_name.len() - 3],
+                None => &type_name[..type_name.len() - 3],
+            },
+            |robot| ::alloc::boxed::Box::pin($func(robot))
+        )
+    }};
+    ($name:expr, $func:path) => {{
+        ::autons::simple::Route::new(
+            $name,
+            |robot| ::alloc::boxed::Box::pin($func(robot))
+        )
     }};
 }
 pub use route;
