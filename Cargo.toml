@@ -26,6 +26,12 @@ vexide = { version = "0.7.0-beta.3", default-features = false, features = [
     "core",
     "devices",
 ] }
+vex-sdk = "0.26.0"
 
 [dev-dependencies]
 vexide = "0.7.0-beta.3"
+
+[features]
+default = ["simple", "compete"]
+simple = []
+compete = []

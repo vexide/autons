@@ -95,7 +95,10 @@ use core::future::Future;
 
 extern crate alloc;
 
+#[cfg(feature = "simple")]
 pub mod simple;
+
+#[cfg(feature = "compete")]
 pub mod compete;
 
 /// A structure that picks an autonomous route to run.
@@ -107,5 +110,6 @@ pub trait Selector<R> {
 /// 
 /// This module is meant to be glob imported.
 pub mod prelude {
+    #[cfg(feature = "compete")]
     pub use crate::compete::{SelectCompete, SelectCompeteExt};
 }
