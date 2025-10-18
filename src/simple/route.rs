@@ -28,7 +28,7 @@ impl<R> Clone for Route<R> {
 }
 
 impl<R> Route<R> {
-    pub fn new(name: &'static str, callback: RouteFn<R>) -> Self {
+    pub const fn new(name: &'static str, callback: RouteFn<R>) -> Self {
         Self { name, callback }
     }
 
