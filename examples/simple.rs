@@ -1,6 +1,6 @@
 use autons::{
     prelude::*,
-    simple::{route, SimpleSelect},
+    simple::{SimpleSelect, route},
 };
 use vexide::prelude::*;
 
@@ -20,10 +20,7 @@ async fn main(peripherals: Peripherals) {
     robot
         .compete(SimpleSelect::new(
             peripherals.display,
-            [
-                route!(Robot::route_1),
-                route!(Robot::route_2),
-            ],
+            [route!(Robot::route_1), route!(Robot::route_2)],
         ))
         .await;
 }

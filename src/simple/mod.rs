@@ -49,7 +49,7 @@
 //! }
 //! ```
 
-use std::{rc::Rc, cell::RefCell};
+use std::{cell::RefCell, rc::Rc};
 
 use vexide::{
     display::{Display, Font, FontFamily, FontSize, Line, Rect, Text, TouchState},
