@@ -13,13 +13,14 @@
           overlays = [ (import rust-overlay) ];
         };
         cargo-v5' = cargo-v5.packages.${system}.default;
+        rustToolchain =
+          pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
       in {
         devShell = pkgs.mkShell {
           buildInputs = [
             cargo-v5'
-            pkgs.cargo-binutils
-            (pkgs.rust-bin.nightly."2024-12-06".default.override {
-              extensions = [ "rust-analyzer" "rust-src" "clippy" "llvm-tools" ];
+            (rustToolchain.override {
+              extensions = [ "rust-analyzer" "rust-src" "clippy" ];
             })
           ];
         };

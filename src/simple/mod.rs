@@ -14,11 +14,6 @@
 //! Robot with two autonomous routes using [`SelectCompete`](crate::compete::SelectCompete).
 //!
 //! ```
-//! #![no_std]
-//! #![no_main]
-//!
-//! extern crate alloc;
-//!
 //! use vexide::prelude::*;
 //! use autons::{
 //!     prelude::*,

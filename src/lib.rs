@@ -48,11 +48,6 @@
 //! [`SelectCompete`]: crate::compete::SelectCompete
 //! 
 //! ```
-//! #![no_std]
-//! #![no_main]
-//! 
-//! extern crate alloc;
-//! 
 //! use autons::{
 //!     prelude::*,
 //!     simple::{route, SimpleSelect},
@@ -88,12 +83,9 @@
 //! }
 //! ```
 
-
 #![feature(never_type)]
 
 use core::future::Future;
-
-
 
 #[cfg(feature = "simple")]
 pub mod simple;

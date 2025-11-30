@@ -50,11 +50,6 @@ with two routes on our robot:
 [`SelectCompete`]: crate::compete::SelectCompete
 
 ```rs
-#![no_std]
-#![no_main]
-
-extern crate alloc;
-
 use autons::{
     prelude::*,
     simple::{route, SimpleSelect},

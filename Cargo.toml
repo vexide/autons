@@ -21,15 +21,11 @@ compress = true
 targets = ["armv7a-none-eabi"]
 
 [dependencies]
-vexide = { version = "0.8.0", default-features = false, features = [
-	"async",
-	"core",
-	"devices",
-] }
+vexide =  "0.8.0"
 vex-sdk = "0.28.0"
 
 [dev-dependencies]
-vexide = "0.8.0"
+vexide = { version = "0.8.0", features = ["full", "default-sdk"] }
 
 [features]
 default = ["simple", "compete"]
