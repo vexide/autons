@@ -7,7 +7,7 @@
 //! [`Compete`]: vexide::competition::Compete
 //! [`CompeteExt`]: vexide::competition::CompeteExt
 
-use core::{future::Future, ops::ControlFlow, pin::Pin};
+use std::{future::Future, ops::ControlFlow, pin::Pin};
 
 use vexide::competition::CompetitionRuntime;
 

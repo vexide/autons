@@ -85,7 +85,7 @@
 
 #![feature(never_type)]
 
-use core::future::Future;
+use std::future::Future;
 
 #[cfg(feature = "simple")]
 pub mod simple;

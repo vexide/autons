@@ -1,5 +1,4 @@
-use core::{future::Future, pin::Pin};
-use std::ffi::CStr;
+use std::{future::Future, pin::Pin};
 
 type RouteFn<Shared> = for<'s> fn(&'s mut Shared) -> Pin<Box<dyn Future<Output = ()> + 's>>;
 
@@ -12,9 +11,9 @@ type RouteFn<Shared> = for<'s> fn(&'s mut Shared) -> Pin<Box<dyn Future<Output =
 /// It's recommended to use the [`route!()`] macro to aid in creating instances of this struct.
 ///
 /// [`SimpleSelect`]: crate::simple::SimpleSelect
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug)]
 pub struct Route<R> {
-    pub name: &'static CStr,
+    pub name: &'static str,
     pub callback: RouteFn<R>,
 }
 
@@ -28,11 +27,11 @@ impl<R> Clone for Route<R> {
 }
 
 impl<R> Route<R> {
-    pub const fn new(name: &'static CStr, callback: RouteFn<R>) -> Self {
+    pub const fn new(name: &'static str, callback: RouteFn<R>) -> Self {
         Self { name, callback }
     }
 
-    pub fn test(name: &'static CStr, callback: RouteFn<R>) -> Self {
+    pub fn test(name: &'static str, callback: RouteFn<R>) -> Self {
         Self { name, callback }
     }
 }
@@ -51,7 +50,7 @@ impl<R> Route<R> {
 macro_rules! route {
     ($func:path) => {{
         ::autons::simple::Route::new(stringify!($func), |robot| {
-            ::alloc::boxed::Box::pin($func(robot))
+            ::std::boxed::Box::pin($func(robot))
         })
     }};
     ($name:expr, $func:path) => {{ ::autons::simple::Route::new($name, |robot| ::alloc::boxed::Box::pin($func(robot))) }};

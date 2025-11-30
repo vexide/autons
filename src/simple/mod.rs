@@ -49,8 +49,7 @@
 //! }
 //! ```
 
-use core::cell::RefCell;
-use std::{ffi::CStr, rc::Rc};
+use std::{rc::Rc, cell::RefCell};
 
 use vexide::{
     display::{Display, Font, FontFamily, FontSize, Line, Rect, Text, TouchState},
@@ -277,7 +276,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
     fn draw_item(
         display: &mut Display,
         theme: &SimpleSelectTheme,
-        label: &CStr,
+        label: &str,
         index: usize,
         selected: bool,
         active: bool,
@@ -306,7 +305,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
         );
 
         display.draw_text(
-            &Text::new(
+            &Text::from_string(
                 label,
                 Font::new(FontSize::MEDIUM, FontFamily::Proportional),
                 [
