@@ -30,17 +30,13 @@ impl<R> Route<R> {
     pub const fn new(name: &'static str, callback: RouteFn<R>) -> Self {
         Self { name, callback }
     }
-
-    pub fn test(name: &'static str, callback: RouteFn<R>) -> Self {
-        Self { name, callback }
-    }
 }
 
 /// Concisely creates an instance of a [`SimpleSelectRoute`].
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// let routes = [
 ///     route!("Route 1", Robot::route_1),
 ///     route!("Route 2", Robot::route_2),
@@ -53,6 +49,6 @@ macro_rules! route {
             ::std::boxed::Box::pin($func(robot))
         })
     }};
-    ($name:expr, $func:path) => {{ ::autons::simple::Route::new($name, |robot| ::alloc::boxed::Box::pin($func(robot))) }};
+    ($name:expr, $func:path) => {{ ::autons::simple::Route::new($name, |robot| ::std::boxed::Box::pin($func(robot))) }};
 }
 pub use route;

@@ -13,7 +13,7 @@
 //! uploading these routes as individual programs to different slots, `autons` provides a way for
 //! us to choose between these routes in a single program at runtime.
 //!
-//! ```
+//! ```ignore
 //! async fn route_1(robot: &mut MyRobot) {
 //!     // do stuff...
 //! }
@@ -32,7 +32,7 @@
 //! In `vexide`, you normally have only one `autonomous` function provided to you through the `Compete`
 //! trait:
 //!
-//! ```
+//! ```ignore
 //! impl Compete for MyRobot {
 //!     async fn autonomous(&mut self) {
 //!         // route goes here...
@@ -47,7 +47,7 @@
 //!
 //! [`SelectCompete`]: crate::compete::SelectCompete
 //!
-//! ```
+//! ```no_run
 //! use autons::{
 //!     prelude::*,
 //!     simple::{route, SimpleSelect},
