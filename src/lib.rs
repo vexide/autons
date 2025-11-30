@@ -88,12 +88,12 @@
 //! }
 //! ```
 
-#![no_std]
+
 #![feature(never_type)]
 
 use core::future::Future;
 
-extern crate alloc;
+
 
 #[cfg(feature = "simple")]
 pub mod simple;
