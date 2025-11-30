@@ -1,47 +1,47 @@
 //! Simple touchscreen-based autonomous route selector.
-//! 
+//!
 //! ![Screenshot of the `SimpleSelect` menu showing two routes](https://i.imgur.com/qM9qMsd.png)
-//! 
+//!
 //! [`SimpleSelect`] is a barebones and lightweight autonomous selector that allows picking
 //! between at most 12 autonomous routes using the V5 Brain's display and touchscreen.
-//! 
+//!
 //! The selector provides a user interface that mimicks the appearance of other VEXos
 //! dashboards, with basic support for color themes through the [`SimpleSelect::new_with_theme`]
 //! function.
-//! 
+//!
 //! # Examples
-//! 
+//!
 //! Robot with two autonomous routes using [`SelectCompete`](crate::compete::SelectCompete).
-//! 
+//!
 //! ```
 //! #![no_std]
 //! #![no_main]
-//! 
+//!
 //! extern crate alloc;
-//! 
+//!
 //! use vexide::prelude::*;
 //! use autons::{
 //!     prelude::*,
 //!     simple::{route, SimpleSelect},
 //! };
-//! 
+//!
 //! struct Robot {}
-//! 
+//!
 //! impl Robot {
 //!     async fn route_1(&mut self) {}
 //!     async fn route_2(&mut self) {}
 //! }
-//! 
+//!
 //! impl SelectCompete for Robot {
 //!     async fn driver(&mut self) {
 //!         // ...
 //!     }
 //! }
-//! 
+//!
 //! #[vexide::main]
 //! async fn main(peripherals: Peripherals) {
 //!     let robot = Robot {};
-//! 
+//!
 //!     robot
 //!         .compete(SimpleSelect::new(
 //!             peripherals.display,
@@ -54,11 +54,11 @@
 //! }
 //! ```
 
-use alloc::rc::Rc;
 use core::cell::RefCell;
+use std::{ffi::CStr, rc::Rc};
 
 use vexide::{
-    devices::display::{Display, Font, FontFamily, FontSize, Line, Rect, Text, TouchState},
+    display::{Display, Font, FontFamily, FontSize, Line, Rect, Text, TouchState},
     task::{self, Task},
     time::sleep,
 };
@@ -78,17 +78,17 @@ struct SelectorState<R: 'static, const N: usize> {
 }
 
 /// Simple touchscreen-based autonomous route selector.
-/// 
+///
 /// `SimpleSelect` is a barebones and lightweight autonomous selector that allows picking
 /// between up to 16 autonomous routes using the V5 brain's display and touchscreen.
-/// 
+///
 /// The selector provides a user interface that mimicks the appearance of other VEXos
 /// dashboards, with basic support for color themes through the [`SimpleSelect::new_with_theme`]
 /// function.
-/// 
+///
 /// This struct implements the [`Selector`] trait and should be used with the [`SelectCompete`]
 /// trait if using vexide's competition runtime.
-/// 
+///
 /// [`SelectCompete`]: crate::compete::SelectCompete
 pub struct SimpleSelect<R: 'static, const N: usize> {
     state: Rc<RefCell<SelectorState<R, N>>>,
@@ -103,7 +103,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
 
     /// Creates a new selector from a [`Display`] peripheral and array of routes with a provided
     /// [custom color theme].
-    /// 
+    ///
     /// [custom color theme]: SimpleSelectTheme
     #[allow(clippy::await_holding_refcell_ref)] // clippy is too dumb to realize we explicitly drop
     pub fn new_with_theme(
@@ -137,7 +137,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
                     theme.background_default,
                 );
 
-                // Gridlines
+                // Grid lines
                 Self::draw_borders(&mut display, &theme);
 
                 {
@@ -161,8 +161,8 @@ impl<R, const N: usize> SimpleSelect<R, N> {
                     let mut state = state.borrow_mut();
 
                     let touch = display.touch_status();
-                    let touch_index = ((6 * (touch.x / (Display::HORIZONTAL_RESOLUTION / 2)))
-                        + touch.y / 40) as usize;
+                    let touch_index = ((6 * (touch.point.x / (Display::HORIZONTAL_RESOLUTION / 2)))
+                        + touch.point.y / 40) as usize;
 
                     if matches!(touch.state, TouchState::Held | TouchState::Pressed) {
                         if active_item
@@ -173,7 +173,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
                                 Self::draw_item(
                                     &mut display,
                                     &theme,
-                                    state.routes[old_active_item].name,
+                                    &state.routes[old_active_item].name,
                                     old_active_item,
                                     old_active_item == state.selection,
                                     false,
@@ -183,7 +183,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
                             Self::draw_item(
                                 &mut display,
                                 &theme,
-                                state.routes[touch_index].name,
+                                &state.routes[touch_index].name,
                                 touch_index,
                                 touch_index == state.selection,
                                 true,
@@ -195,7 +195,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
                                 Self::draw_item(
                                     &mut display,
                                     &theme,
-                                    state.routes[old_active_item].name,
+                                    &state.routes[old_active_item].name,
                                     old_active_item,
                                     old_active_item == state.selection,
                                     false,
@@ -211,7 +211,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
                             Self::draw_item(
                                 &mut display,
                                 &theme,
-                                state.routes[old_selection].name,
+                                &state.routes[old_selection].name,
                                 old_selection,
                                 false,
                                 false,
@@ -220,7 +220,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
                             Self::draw_item(
                                 &mut display,
                                 &theme,
-                                state.routes[prev_active_item].name,
+                                &state.routes[prev_active_item].name,
                                 prev_active_item,
                                 true,
                                 false,
@@ -232,7 +232,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
                             Self::draw_item(
                                 &mut display,
                                 &theme,
-                                state.routes[prev_active_item].name,
+                                &state.routes[prev_active_item].name,
                                 prev_active_item,
                                 false,
                                 false,
@@ -246,7 +246,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
                         Self::draw_item(
                             &mut display,
                             &theme,
-                            state.routes[dirty_selection].name,
+                            &state.routes[dirty_selection].name,
                             dirty_selection,
                             false,
                             false,
@@ -255,7 +255,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
                         Self::draw_item(
                             &mut display,
                             &theme,
-                            state.routes[state.selection].name,
+                            &state.routes[state.selection].name,
                             state.selection,
                             true,
                             false,
@@ -282,7 +282,7 @@ impl<R, const N: usize> SimpleSelect<R, N> {
     fn draw_item(
         display: &mut Display,
         theme: &SimpleSelectTheme,
-        label: &str,
+        label: &CStr,
         index: usize,
         selected: bool,
         active: bool,

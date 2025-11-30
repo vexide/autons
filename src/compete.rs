@@ -3,14 +3,13 @@
 //! This module provides the [`SelectCompete`] and [`SelectCompeteExt`] traits,
 //! which are equivalents to vexide's [`Compete`] and [`CompeteExt`] traits with
 //! additional support for autonomous selectors.
-//! 
+//!
 //! [`Compete`]: vexide::competition::Compete
 //! [`CompeteExt`]: vexide::competition::CompeteExt
 
-use alloc::boxed::Box;
 use core::{future::Future, ops::ControlFlow, pin::Pin};
 
-use vexide::prelude::CompetitionRuntime;
+use vexide::competition::CompetitionRuntime;
 
 use crate::Selector;
 
@@ -55,7 +54,7 @@ pub trait SelectCompete: Sized {
     ///
     /// See [`vexide::competition::CompetitionBuilder::on_disconnect`] for more information.
     async fn disconnected(&mut self) {}
-    
+
     /// Runs immediately *before* the selected autonomous route.
     async fn before_route(&mut self) {}
 
@@ -64,7 +63,7 @@ pub trait SelectCompete: Sized {
 }
 
 /// Internal shared state for [`SelectCompete`]'s competition runtime instance.
-/// 
+///
 /// This structure stores both the robot and the user's autonomous selector.
 #[doc(hidden)]
 pub struct SelectCompeteShared<R, S: Selector<R>> {
